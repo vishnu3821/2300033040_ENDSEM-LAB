@@ -1,0 +1,21 @@
+version: '3.8'
+
+services:
+  tms-frontend:
+    build:
+      context: .
+      target: runtime  # Target the nginx runtime stage
+    ports:
+      - "80:80"  # Map to standard HTTP port
+    container_name: tms-frontend
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost/healthz"]
+      interval: 30s
+      timeout: 3s
+      retries: 3
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "3"
